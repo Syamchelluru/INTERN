@@ -56,15 +56,16 @@ export default function UserDashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen bg-gray-100">
+      <div className="flex min-h-screen bg-gray-50 flex-col md:flex-row">
         <Sidebar />
-        <main className="flex-1 p-6 md:p-8">
-          <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
             Welcome, {user?.name}
           </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <Card className="bg-white/80 backdrop-blur-md shadow-md rounded-xl">
+          {/* Device Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <Card className="bg-white shadow rounded-xl">
               <CardHeader className="flex justify-between items-center">
                 <CardTitle className="text-sm text-gray-700">Your Devices</CardTitle>
                 <Smartphone className="h-5 w-5 text-blue-600" />
@@ -74,7 +75,7 @@ export default function UserDashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-md shadow-md rounded-xl">
+            <Card className="bg-white shadow rounded-xl">
               <CardHeader className="flex justify-between items-center">
                 <CardTitle className="text-sm text-gray-700">Online Devices</CardTitle>
                 <Activity className="h-5 w-5 text-green-600" />
@@ -87,8 +88,10 @@ export default function UserDashboardPage() {
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-white/80 backdrop-blur-md shadow-md rounded-xl">
+          {/* Device Info and Map */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Map Section */}
+            <Card className="bg-white shadow rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-700">
                   <MapPin className="h-5 w-5" />
@@ -99,13 +102,14 @@ export default function UserDashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-96">
+                <div className="h-80 sm:h-96 w-full rounded-lg overflow-hidden">
                   <MapComponent devices={devices} />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-md shadow-md rounded-xl">
+            {/* Device Status Section */}
+            <Card className="bg-white shadow rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-700">
                   <Smartphone className="h-5 w-5" />
@@ -113,11 +117,11 @@ export default function UserDashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {devices.map((device) => (
                     <div
                       key={device.id}
-                      className="flex justify-between items-center p-3 border border-gray-200 rounded-lg bg-white/60 shadow-sm"
+                      className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 p-3 border border-gray-200 rounded-lg bg-white/90"
                     >
                       <div className="flex items-center gap-3">
                         <span
@@ -133,7 +137,10 @@ export default function UserDashboardPage() {
                           </p>
                         </div>
                       </div>
-                      <Badge variant={device.isOnline ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={device.isOnline ? 'default' : 'secondary'}
+                        className="w-fit"
+                      >
                         {device.isOnline ? 'Online' : 'Offline'}
                       </Badge>
                     </div>
