@@ -47,10 +47,12 @@ export function Sidebar({ className }: SidebarProps) {
   const handleLogout = () => {
     logout();
     router.push('/');
+    setIsMobileOpen(false);
   };
 
-  const SidebarContent = (
-    <div className="flex flex-col h-full">
+  // Sidebar content without logout
+  const SidebarMain = (
+    <>
       {/* Logo & Title */}
       <div className="flex items-center gap-3 mb-8">
         <MapPin className="h-8 w-8 text-cyan-400" />
@@ -76,7 +78,7 @@ export function Sidebar({ className }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2">
+      <nav className="space-y-2">
         {menuItems.map((item) => (
           <Button
             key={item.href}
@@ -95,17 +97,7 @@ export function Sidebar({ className }: SidebarProps) {
           </Button>
         ))}
       </nav>
-
-      {/* Logout */}
-      <Button
-        variant="ghost"
-        onClick={handleLogout}
-        className="w-full mt-4 text-red-300 hover:bg-red-500/20 transition-all duration-200"
-      >
-        <LogOut className="h-4 w-4 mr-2" />
-        Logout
-      </Button>
-    </div>
+    </>
   );
 
   return (
@@ -115,7 +107,18 @@ export function Sidebar({ className }: SidebarProps) {
         "hidden md:flex w-64 h-screen p-5 bg-[#0f111a]/60 backdrop-blur-md border-r border-white/10 shadow-lg text-white",
         className
       )}>
-        {SidebarContent}
+        <div className="flex flex-col h-full">
+          {SidebarMain}
+
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className="w-full mt-auto text-red-300 hover:bg-red-500/20 transition-all duration-200"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
+        </div>
       </aside>
 
       {/* Mobile Hamburger */}
@@ -133,22 +136,41 @@ export function Sidebar({ className }: SidebarProps) {
       {/* Mobile Drawer */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full w-72 p-5 bg-[#0f111a]/90 backdrop-blur-md border-l border-white/10 text-white shadow-lg z-40 transform transition-transform duration-300",
+          "fixed top-0 right-0 h-full w-72 bg-[#0f111a]/90 backdrop-blur-md border-l border-white/10 text-white shadow-lg z-40 transform transition-transform duration-300",
           isMobileOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-bold">Menu</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsMobileOpen(false)}
-            className="text-white"
-          >
-            <X className="h-6 w-6" />
-          </Button>
+        <div className="flex flex-col h-full p-5">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-bold">Menu</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileOpen(false)}
+              className="text-white"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto">
+            {SidebarMain}
+          </div>
+
+          {/* Sticky Logout */}
+          <div className="pt-4 border-t border-white/10">
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="w-full text-red-300 hover:bg-red-500/20 transition-all duration-200"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
-        {SidebarContent}
       </div>
     </>
   );
